@@ -1,0 +1,26 @@
+name: CI
+
+on: [push, pull_request]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Install dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y libeigen3-dev build-essential cmake
+        
+    - name: Build
+      run: |
+        mkdir build
+        cd build
+        cmake ..
+        make
+        
+    - name: Test
+      run: |
+        cd build
+        ctest --output-on-failure
