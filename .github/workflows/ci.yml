@@ -11,11 +11,11 @@ jobs:
       run: |
         sudo apt-get update
         sudo apt-get install -y libeigen3-dev libgtest-dev build-essential cmake
-        # Build and install GTest
-        cd /usr/src/gtest
+        # Build and install GTest (updated path for Ubuntu 24.04)
+        cd /usr/src/googletest
         sudo cmake CMakeLists.txt
         sudo make
-        sudo cp *.a /usr/lib
+        sudo cp lib/libgtest*.a /usr/lib
         
     - name: Build
       run: |
