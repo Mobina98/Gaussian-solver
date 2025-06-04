@@ -1,5 +1,6 @@
 #include <gtest/gtest.h>
 #include "../include/gauss.hpp"
+#include "../src/gauss.hpp"
 
 TEST(GaussianSolverTest, SolvesSimpleSystem) {
     MatrixXd A(2, 2);
@@ -10,6 +11,11 @@ TEST(GaussianSolverTest, SolvesSimpleSystem) {
     
     VectorXd x = solveGaussian(A, b);
     EXPECT_TRUE(testSolution(A, b, x));
+}
+
+int main(int argc, char **argv) {
+    testing::InitGoogleTest(&argc, argv);
+    return RUN_ALL_TESTS();
 }
 
 TEST(GaussianSolverTest, HandlesSingularMatrix) {

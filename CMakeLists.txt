@@ -12,9 +12,21 @@ add_executable(solver src/main.cpp src/gauss.cpp)
 target_link_libraries(solver Eigen3::Eigen)
 
 # Tests
-add_executable(tests test/unit_tests.cpp src/gauss.cpp)
-target_link_libraries(tests GTest::GTest Eigen3::Eigen)
-add_test(NAME UnitTests COMMAND tests)
+if(BUILD_TESTS)
+    find_package(GTest REQUIRED)
+    include(GoogleTest)
+    
+    add_executable(tests 
+        test/unit_tests.cpp 
+        src/gauss.cpp
+    )
+    target_link_libraries(tests 
+        GTest::GTest 
+        GTest::Main  # This provides the main() function
+        Eigen3::Eigen
+    )
+    gtest_discover_tests(tests)
+endif()
 
 # Installation
 install(TARGETS solver DESTINATION bin)
