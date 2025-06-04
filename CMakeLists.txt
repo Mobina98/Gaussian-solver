@@ -14,18 +14,21 @@ target_link_libraries(solver Eigen3::Eigen)
 # Tests
 if(BUILD_TESTS)
     find_package(GTest REQUIRED)
-    include(GoogleTest)
+    include(GoogleTest)  # For gtest_discover_tests
     
-    add_executable(tests 
+    add_executable(test_executable 
         test/unit_tests.cpp 
         src/gauss.cpp
     )
-    target_link_libraries(tests 
+    target_link_libraries(test_executable 
         GTest::GTest 
-        GTest::Main  # This provides the main() function
+        GTest::Main
         Eigen3::Eigen
     )
-    gtest_discover_tests(tests)
+    
+    gtest_discover_tests(test_executable
+        WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}
+    )
 endif()
 
 # Installation

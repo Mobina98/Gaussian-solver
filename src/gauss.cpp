@@ -73,6 +73,30 @@ void generateRandomSystem(int size, MatrixXd& A, VectorXd& b, int seed) {
     }
 }
 
+void generateLargeSystem(int size, MatrixXd& A, VectorXd& b, double sparsity = 0.9) {
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_real_distribution<double> val_dist(-10.0, 10.0);
+    std::bernoulli_distribution sparse_dist(sparsity);
+
+    A = MatrixXd::Zero(size, size);
+    b = VectorXd::Zero(size);
+
+    for (int i = 0; i < size; ++i) {
+        for (int j = 0; j < size; ++j) {
+            if (!sparse_dist(gen)) {
+                A(i,j) = val_dist(gen);
+            }
+        }
+        b(i) = val_dist(gen);
+    }
+    
+    // Ensure diagonal dominance for solvability
+    for (int i = 0; i < size; ++i) {
+        A(i,i) = A.row(i).cwiseAbs().sum() + 1.0;
+    }
+}
+
 bool testSolution(const MatrixXd& A, const VectorXd& b, const VectorXd& x, double tolerance) {
     return (A * x - b).norm() < tolerance;
 }
